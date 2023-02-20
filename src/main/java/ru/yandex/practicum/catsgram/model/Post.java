@@ -38,4 +38,11 @@ public class Post {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "author='" + author + '\'' +
+                '}';
+    }
 }
