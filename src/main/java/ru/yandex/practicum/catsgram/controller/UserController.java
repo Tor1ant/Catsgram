@@ -1,47 +1,34 @@
 package ru.yandex.practicum.catsgram.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.catsgram.exceptions.InvalidEmailException;
-import ru.yandex.practicum.catsgram.exceptions.UserAlreadyExistException;
 import ru.yandex.practicum.catsgram.model.User;
+import ru.yandex.practicum.catsgram.service.UserService;
 
-import java.util.*;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final Map<String, User> users = new HashMap<>();
+    private final UserService userService;
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping()
-    public List<User> getUsers() {
-        log.debug("В текущий момент: " + users.size() + " пользователей");
-        return new ArrayList<>(users.values());
+    public Collection<User> getUsers() {
+        return userService.findAllUsers();
     }
 
     @PostMapping()
     public User postUser(@RequestBody User user) {
-        if (user.getEmail() == null || user.getEmail().equals("")) {
-            throw new InvalidEmailException("email не может быть пустым.");
-        }
-        if (users.containsKey(user.getEmail())) {
-            throw new UserAlreadyExistException("Пользователь с таким email уже существует.");
-        }
-        log.debug("Сохранённый пользователь: {}", user);
-        users.put(user.getEmail(), user);
-        return user;
+        return userService.createUser(user);
     }
 
     @PutMapping()
     public User putUser(@RequestBody User user) {
-        if (user.getEmail() == null || user.getEmail().equals("")) {
-            throw new InvalidEmailException("email не может быть пустым.");
-        }
-        log.debug("Сохранённый пользователь: {}", user);
-        users.put(user.getEmail(), user);
-        return user;
+        return userService.updateUser(user);
     }
 }
