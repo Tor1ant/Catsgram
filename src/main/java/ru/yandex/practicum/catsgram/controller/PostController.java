@@ -3,6 +3,7 @@ package ru.yandex.practicum.catsgram.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.catsgram.exceptions.PostNotFoundException;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.service.PostService;
 
@@ -18,8 +19,18 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<Post> findAll() {
-        return postService.findAll();
+    public List<Post> findAll(@RequestParam(required = false, defaultValue = "empty") String sort,
+                              @RequestParam(required = false, defaultValue = "-1") Integer size,
+                              @RequestParam(required = false, defaultValue = "-1") Integer page) {
+        if (!(sort.equals("asc") || sort.equals("desc"))) {
+            throw new IllegalArgumentException();
+        }
+
+        if (size < 0 || page < 0) {
+            throw new PostNotFoundException("не правильный параметр запроса размера постов");
+        }
+        Integer from = page * size;
+        return postService.findAll(size, sort, from);
     }
 
     @PostMapping(value = "/post")
