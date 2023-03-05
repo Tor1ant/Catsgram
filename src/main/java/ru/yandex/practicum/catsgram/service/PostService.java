@@ -9,6 +9,7 @@ import ru.yandex.practicum.catsgram.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -21,8 +22,14 @@ public class PostService {
         this.userService = userService;
     }
 
-    public List<Post> findAll() {
-        return posts;
+    public List<Post> findAll(Integer size, String sort, Integer from) {
+        return posts.stream().sorted((date1, date2) -> {
+            int comp = date1.getCreationDate().compareTo(date2.getCreationDate());
+            if (sort.equals("desc")) {
+                comp = -1 * comp;
+            }
+            return comp;
+        }).skip(from).limit(size).collect(Collectors.toList());
     }
 
     private static Integer getNextId() {
