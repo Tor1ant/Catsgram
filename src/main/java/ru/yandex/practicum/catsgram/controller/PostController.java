@@ -19,9 +19,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<Post> findAll(@RequestParam(required = false, defaultValue = "empty") String sort,
-                              @RequestParam(required = false, defaultValue = "-1") Integer size,
-                              @RequestParam(required = false, defaultValue = "-1") Integer page) {
+    public List<Post> findAll(@RequestParam(required = false, defaultValue = "desc") String sort,
+                              @RequestParam(required = false, defaultValue = "10") Integer size,
+                              @RequestParam(required = false, defaultValue = "0") Integer page) {
         if (!(sort.equals("asc") || sort.equals("desc"))) {
             throw new IllegalArgumentException();
         }

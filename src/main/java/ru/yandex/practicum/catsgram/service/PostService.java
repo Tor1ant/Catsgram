@@ -54,4 +54,14 @@ public class PostService {
         post.setId(getNextId());
         return post;
     }
+
+    public List<Post> findAllByUserMail(String sort, int size, String asText) {
+        return posts.stream().filter(post -> post.getAuthor().equals(asText)).sorted((date1, date2) -> {
+            int comp = date1.getCreationDate().compareTo(date2.getCreationDate());
+            if (sort.equals("desc")) {
+                comp = -1 * comp;
+            }
+            return comp;
+        }).limit(size).collect(Collectors.toList());
+    }
 }
