@@ -12,28 +12,27 @@ import java.util.Collection;
 public class UserController {
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public Collection<User> getUsers() {
-        return userService.findAllUsers();
+    @GetMapping
+    public Collection<User> findAll() {
+        return userService.findAll();
     }
 
-    @PostMapping()
-    public User postUser(@RequestBody User user) {
+    @PostMapping
+    public User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
-    @PutMapping()
-    public User putUser(@RequestBody User user) {
+    @PutMapping
+    public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
 
-    @GetMapping("{userEmail}")
-    public User findUserByEmail(@PathVariable String userEmail) {
-        return userService.findUserByEmail(userEmail);
+    @GetMapping("/user/{userMail}")
+    public User getUser(@PathVariable("userMail") String userMail){
+        return userService.findUserByEmail(userMail);
     }
 }
