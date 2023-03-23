@@ -1,28 +1,39 @@
 package ru.yandex.practicum.catsgram.model;
 
-import java.time.LocalDate;
+import java.util.Objects;
 
 public class User {
-    private final String email;
-    private final String nickname;
-    private final LocalDate birthdate;
+    private String id;
 
-    public User(String email, String nickname, LocalDate birthdate) {
-        this.email = email;
-        this.nickname = nickname;
-        this.birthdate = birthdate;
+    private String username;
+
+    private String nickname;
+
+    public User() {
     }
 
-    public String getEmail() {
-        return email;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getNickname() {
         return nickname;
     }
 
-    public LocalDate getBirthdate() {
-        return birthdate;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -32,18 +43,25 @@ public class User {
 
         User user = (User) o;
 
-        return email.equals(user.email);
+        if (!Objects.equals(id, user.id)) return false;
+        if (!Objects.equals(username, user.username)) return false;
+        return Objects.equals(nickname, user.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "email='" + email + '\'' +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-        return email.hashCode();
     }
 }
